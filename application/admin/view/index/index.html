@@ -63,13 +63,13 @@
           </li>
           <li class="layui-nav-item" lay-unselect>
             <a href="javascript:;">
-              <cite>贤心</cite>
+              <cite>{$Think.session.username}</cite>
             </a>
             <dl class="layui-nav-child">
-              <dd><a lay-href="set/user/info.html">基本资料</a></dd>
-              <dd><a lay-href="set/user/password.html">修改密码</a></dd>
+              <dd><a lay-href="{:url('member/index')}">基本资料</a></dd>
+              <dd><a lay-href="{:url('member/index')}">修改密码</a></dd>
               <hr>
-              <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
+              <dd layadmin-event="logout" style="text-align: center;"><a href="{:url('common/logout')}">退出</a></dd>
             </dl>
           </li>
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
@@ -85,7 +85,7 @@
       <div class="layui-side layui-side-menu">
         <div class="layui-side-scroll">
           <div class="layui-logo" lay-href="home/console.html">
-            <span>layuiAdmin</span>
+            <span>管理后台</span>
           </div>
           
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">

@@ -13,7 +13,7 @@ class Login extends Validate{
     protected $rule = [
         'username' => 'require',
         'password' => 'require',
-        'captcha' => 'require|checkCaptcha:null',
+        'captcha|验证码'=>'require|captcha',
     ];
 
     protected $message = [
@@ -21,15 +21,5 @@ class Login extends Validate{
         'password.require' => '用户名或密码错误！',
         'captcha.require' => '验证码错误',
     ];
-
-    protected function checkCaptcha($value){
-        $captcha = new \org\Captcha();
-        if($captcha->check($value)){
-            return true;
-        }else{
-            return '验证码错误！';
-        }
-    }
-
 
 }

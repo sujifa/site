@@ -25,8 +25,8 @@ class Common extends Controller{
 
     //退出登录
     public function logout(){
-        session('user',null);
-        return $this->redirect(url('admin/base/login'));
+        session('username',null);
+        return $this->redirect(url('admin/login/login'));
     }
     //清楚缓存
     public function clearCache(){
@@ -38,11 +38,10 @@ class Common extends Controller{
 
     //权限检查
     protected function checkAuth(){
-//        if(!Session::has('uid')){
-//            $this->redirect('admin/base/login');
-//        }
+        if(!Session::has('uid')){
+            $this->redirect('admin/login/login');
+        }
 
-        $uid = session('uid');
         $uid = 1;
         $request        = Request::instance();
         //获取当前模块
@@ -91,7 +90,6 @@ class Common extends Controller{
     //根据权限生成菜单信息
     protected function menus(){
         $uid = session('uid');
-        $uid = 1;
         if($uid == 1){
             $menus = Db::name('UserRule')->order('id asc')->select();
         }else{
