@@ -5,7 +5,7 @@
  * Date: 2017/3/23
  * Time: 0:26
  */
-namespace app\index\validate;
+namespace app\admin\validate;
 
 use think\Db;
 use think\Validate;

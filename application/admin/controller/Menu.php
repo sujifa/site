@@ -5,7 +5,7 @@
  * Date: 2017/3/24
  * Time: 9:08
  */
-namespace app\index\controller;
+namespace app\admin\controller;
 
 use think\Request;
 use think\Db;
@@ -28,7 +28,7 @@ class Menu extends Common {
             }
             $addMenu = Db::name('UserRule')->insert($data);
             if($addMenu !== false){
-                return $this->success('添加成功',url('index/menu/index'));
+                return $this->success('添加成功',url('index'));
             }else{
                 return $this->error('添加失败');
             }
@@ -50,7 +50,7 @@ class Menu extends Common {
             }
             $addMenu = Db::name('UserRule')->where('id',$id)->update($data);
             if($addMenu){
-                return $this->success('修改成功',url('index/menu/index'));
+                return $this->success('修改成功',url('index'));
             }else{
                 return $this->error('修改失败');
             }
@@ -71,7 +71,7 @@ class Menu extends Common {
         $id = input('id');
         $menu = Db::name('UserRule')->where('id',$id)->delete();
         if($menu){
-            return $this->success('删除成功',url('index/menu/index'));
+            return $this->success('删除成功',url('index'));
         }else{
             return $this->error('删除失败');
         }

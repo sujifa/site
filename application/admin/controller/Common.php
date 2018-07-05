@@ -5,7 +5,7 @@
  * Date: 2017/3/22
  * Time: 13:42
  */
-namespace app\index\controller;
+namespace app\admin\controller;
 
 use \think\Controller;
 use think\Cache;
@@ -26,23 +26,24 @@ class Common extends Controller{
     //退出登录
     public function logout(){
         session('user',null);
-        return $this->redirect(url('index/base/login'));
+        return $this->redirect(url('admin/base/login'));
     }
     //清楚缓存
     public function clearCache(){
         Cache::clear();
         $path = dirname(APP_PATH)."/runtime/temp";
         delDirAndFile($path,false);
-        return $this->success('清除缓存成功',url('index/index/index'));
+        return $this->success('清除缓存成功',url('admin/index/index'));
     }
 
     //权限检查
     protected function checkAuth(){
-        if(!Session::has('uid')){
-            $this->redirect('index/base/login');
-        }
+//        if(!Session::has('uid')){
+//            $this->redirect('admin/base/login');
+//        }
 
         $uid = session('uid');
+        $uid = 1;
         $request        = Request::instance();
         //获取当前模块
         $module     = strtolower($request->module());
@@ -57,7 +58,7 @@ class Common extends Controller{
             //超级管理员，直接返回
             return true;
         }
-        $not_check = ['index/index/index','index/base/login','index/index/main','index/common/logout'];
+        $not_check = ['admin/index/index','admin/base/login','admin/index/main','admin/common/logout'];
         //获取菜单的id
         $ruleId = Db::name('UserRule')->field('id')->where('name',$url)->find();
         //如果不存在，说明权限不受限，可以访问
@@ -82,7 +83,7 @@ class Common extends Controller{
         //权限判断
         if(!in_array($url,$not_check)){
             if(!in_array((string)$ruleId,$rules_array)){
-                return $this->error("没有权限",url('index/index/main'));
+                return $this->error("没有权限",url('admin/index/main'));
             }
         }
 
@@ -90,6 +91,7 @@ class Common extends Controller{
     //根据权限生成菜单信息
     protected function menus(){
         $uid = session('uid');
+        $uid = 1;
         if($uid == 1){
             $menus = Db::name('UserRule')->order('id asc')->select();
         }else{
@@ -110,17 +112,15 @@ class Common extends Controller{
 //        static $key;
         foreach($menuLevel as $k=>$v){
             if($v['pid'] ==0){
-                $list[$v['title']] = $v;
+                $list[$k] = $v;
                 foreach($menuLevel as $kk=>$vv){
                     if($vv['pid'] == $v['id']){
-                        $list[$v['title']]['child'][] = $vv;
+                        $list[$k]['child'][] = $vv;
                     }
                 }
             }
 
         }
-
-
 
         $this->assign('menuLevel',$list);
     }

@@ -1,0 +1,48 @@
+{layout name="common/header_footer" /}
+
+<div class="layui-fluid">
+    <div class="layui-card layui-tab-brief">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <p>权限组</p>
+        </div>
+        <ul class="layui-tab-title">
+            <li class="layui-this">权限组</li>
+            <li class=""><a href="{:url('add')}" >添加权限组</a></li>
+        </ul>
+
+        <div class="layui-card-body">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th style="width: 30px;">ID</th>
+                    <th>权限组</th>
+                    <th>状态</th>
+                    <th>描述</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="userGroups" id="userGroup"}
+                <tr>
+                    <td>{$userGroup.id}</td>
+                    <td>{$userGroup.title}</td>
+                    <td>{$userGroup.status|get_user_status}</td>
+                    <td>{$userGroup.description}</td>
+                    <td>
+                        <a href="{:url('auth',['id'=>$userGroup.id])}" class="layui-btn layui-btn-mini">授权</a>
+                        <a href="{:url('edit',['id'=>$userGroup.id])}" class="layui-btn layui-btn-normal layui-btn-mini">编辑</a>
+                        <a href="{:url('delete',['id'=>$userGroup.id])}" onclick="return confirm('确定要删除吗？');" class="layui-btn layui-btn-danger layui-btn-mini ajax-delete">删除</a>
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="admin-table-page">
+            <div id="page" class="page">
+                {$userGroups->render()}
+            </div>
+        </div>
+    </div>
+</div>

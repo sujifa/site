@@ -62,7 +62,7 @@ class Member extends Common {
             if(!$validate->scene('editPass')->check($data)){
                 return $this->error($validate->getError());
             }
-            $password = md5($data['password'].config('MD5_KEY'));
+            $password = $data['password'];
             $updatePass = Db::name('Users')->where('id',$id)->update(['password'=>$password]);
             if($updatePass !== false){
                 return $this->success('编辑成功',url('index'));
@@ -99,7 +99,7 @@ class Member extends Common {
             }
             $info['username'] = $data['username'];
             $info['nickname'] = $data['nickname'];
-            $info['password'] = md5($data['password'].config('MD5_KEY'));
+            $info['password'] = $data['password'];
             $info['status'] = $data['status'];
             $info['add_time'] = time();
             $addUser = Db::name('Users')->insert($info);

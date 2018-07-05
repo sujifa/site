@@ -1,46 +1,45 @@
 {layout name="common/header_footer" /}
 
-<div class="admin-main">
-
-    <!--tab标签-->
-
-    <div class="layui-tab layui-tab-brief">
+<div class="layui-fluid">
+    <div class="layui-card layui-tab-brief">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <p>菜单</p>
+        </div>
         <ul class="layui-tab-title">
             <li class="layui-this">平台菜单</li>
-            <li class=""><a href="{:url('index/menu/add')}">添加菜单</a></li>
+            <li class=""><a href="{:url('add')}">添加菜单</a></li>
         </ul>
-        <div class="layui-tab-content">
-            <div class="layui-tab-item layui-show">
-                <table class="layui-table">
-                    <thead>
-                    <tr>
-                        <th style="width: 30px;">ID</th>
-                        <th style="width: 30px;">排序</th>
-                        <th>菜单名称</th>
-                        <th>控制器方法</th>
-                        <th>状态</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {foreach name="menu" item="menu"}
-                    <tr>
-                        <td>{$menu.id}</td>
-                        <td>{$menu.sort}</td>
-                        <td>{neq name="menu.level" value="1"}|{php}for($i=1;$i<$menu['level'];$i++){echo ' ----';}{/php}{/neq} {$menu.title}</td>
-                        <td>{$menu.name}</td>
-                        <td>{$menu.status|get_user_status}</td>
-                        <td>
-                            <a href="{:url('index/menu/add',['pid'=>$menu['id']])}" class="layui-btn layui-btn-mini">添加子菜单</a>
-                            <a href="{:url('index/menu/edit',['id'=>$menu['id']])}" class="layui-btn layui-btn-normal layui-btn-mini">编辑</a>
-                            <a href="{:url('index/menu/delete',['id'=>$menu['id']])}" onclick="return confirm('确定要删除吗？')" class="layui-btn layui-btn-danger layui-btn-mini ajax-delete">删除</a>
-                        </td>
-                    </tr>
-                    {/foreach}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
 
+        <div class="layui-card-body">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th style="width: 30px;">ID</th>
+                    <th style="width: 30px;">排序</th>
+                    <th>菜单名称</th>
+                    <th>控制器方法</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach name="menu" item="menu"}
+                <tr>
+                    <td>{$menu.id}</td>
+                    <td>{$menu.sort}</td>
+                    <td>{neq name="menu.level" value="1"}|{php}for($i=1;$i<$menu['level'];$i++){echo ' ----';}{/php}{/neq} {$menu.title}</td>
+                    <td>{$menu.name}</td>
+                    <td>{$menu.status|get_user_status}</td>
+                    <td>
+                        <a href="{:url('add',['pid'=>$menu['id']])}" class="layui-btn layui-btn-mini">添加子菜单</a>
+                        <a href="{:url('edit',['id'=>$menu['id']])}" class="layui-btn layui-btn-normal layui-btn-mini">编辑</a>
+                        <a href="{:url('delete',['id'=>$menu['id']])}" onclick="return confirm('确定要删除吗？')" class="layui-btn layui-btn-danger layui-btn-mini ajax-delete">删除</a>
+                    </td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
 </div>

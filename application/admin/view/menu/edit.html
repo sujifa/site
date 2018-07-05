@@ -1,66 +1,72 @@
 {layout name="common/header_footer" /}
-<div class="admin-main">
-    <div class="layui-tab layui-tab-brief">
+
+<div class="layui-fluid">
+    <div class="layui-card layui-tab-brief">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <p>菜单</p>
+        </div>
         <ul class="layui-tab-title">
-            <li class=""><a href="{:url('index/menu/index')}">后台菜单</a></li>
+            <li class=""><a href="{:url('index')}">后台菜单</a></li>
             <li class="layui-this">编辑菜单</li>
         </ul>
-        <div class="layui-tab-content">
-            <div class="layui-tab-item layui-show">
-                <form class="layui-form form-container" action="{:url('index/menu/edit')}" method="post">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">上级菜单</label>
-                        <div class="layui-input-block">
-                            <select name="pid" lay-verify="required">
-                                <option value="0">一级菜单</option>
-                                {foreach name="menu" item="menu"}
-                                <option value="{$menu.id}" {if condition="$info.pid==$menu.id"} selected="selected"{/if}>{neq name="menu.level" value="1"}|{php}for($i=1;$i<$menu['level'];$i++){echo ' ----';}{/php}{/neq} {$menu.title}</option>
-                                {/foreach}
-                            </select>
-                        </div>
+
+        <div class="layui-card-body">
+            <form class="layui-form" action="{:url('edit')}" method="post">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">上级菜单</label>
+                    <div class="layui-input-block">
+                        <select name="pid" lay-verify="required">
+                            <option value="0">一级菜单</option>
+                            {foreach name="menu" item="menu"}
+                            <option value="{$menu.id}" {if condition="$info.pid==$menu.id"} selected="selected"{/if}>{neq name="menu.level" value="1"}|{php}for($i=1;$i<$menu['level'];$i++){echo ' ----';}{/php}{/neq} {$menu.title}</option>
+                            {/foreach}
+                        </select>
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">菜单名称</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="title" required  lay-verify="required" value="{$info.title}" class="layui-input">
-                        </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">菜单名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" required  lay-verify="required" value="{$info.title}" class="layui-input">
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">控制器方法</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="name" value="{$info.name}" class="layui-input">
-                        </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">控制器方法</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" value="{$info.name}" class="layui-input">
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">图标</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="icon" value="{$info.icon}" class="layui-input">
-                        </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">图标</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="icon" value="{$info.icon}" class="layui-input">
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">状态</label>
-                        <div class="layui-input-block">
-                            <input type="radio" name="status" value="1" title="显示" {if condition="$info.status==1" }checked="checked"{/if}>
-                            <input type="radio" name="status" value="0" title="隐藏" {if condition="$info.status==0" }checked="checked"{/if}>
-                        </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="显示" {if condition="$info.status==1" }checked="checked"{/if}>
+                        <input type="radio" name="status" value="0" title="隐藏" {if condition="$info.status==0" }checked="checked"{/if}>
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">排序</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="sort" value="{$info.sort}" required  lay-verify="required" class="layui-input">
-                        </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="sort" value="{$info.sort}" required  lay-verify="required" class="layui-input">
                     </div>
-                    <input type="hidden" name="id" value="{$info.id}">
-                    <div class="layui-form-item">
-                        <div class="layui-input-block">
-                            <button class="layui-btn" lay-submit lay-filter="*">保存</button>
-                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                        </div>
+                </div>
+                <input type="hidden" name="id" value="{$info.id}">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
+
     </div>
 </div>
 
-<script type="text/javascript" src="STATIC_PATH/plugins/layui/lay/dest/layui.all.js"></script>
+<script>
+    layui.use(['form', 'layedit', 'laydate']);
+</script>

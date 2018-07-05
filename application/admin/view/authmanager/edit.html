@@ -1,0 +1,50 @@
+{layout name="common/header_footer" /}
+
+<div class="layui-fluid">
+    <div class="layui-card layui-tab-brief">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <p>权限组</p>
+        </div>
+        <ul class="layui-tab-title">
+            <li class=""><a href="{:url('authmanager/index')}">权限组</a></li>
+            <li class=""><a href="{:url('authmanager/add')}">添加权限组</a></li>
+            <li class="layui-this">编辑权限组</li>
+        </ul>
+
+        <div class="layui-card-body">
+            <form class="layui-form form-container" action="{:url('edit')}" method="post">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" required  lay-verify="required" value="{$group.title}" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">描述</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="description" value="{$group.description}" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="启用" {if condition="$group.status eq 1"}checked="checked"{/if}>
+                        <input type="radio" name="status" value="0" title="禁用" {if condition="$group.status eq 0"}checked="checked"{/if}>
+                    </div>
+                </div>
+                <input type="hidden" name="id" value="{$group.id}">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'layedit', 'laydate']);
+</script>

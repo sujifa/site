@@ -1,0 +1,58 @@
+{layout name="common/header_footer" /}
+
+<div class="layui-fluid">
+    <div class="layui-card layui-tab-brief">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <p>权限组</p>
+        </div>
+        <ul class="layui-tab-title">
+            <li class=""><a href="{:url('index')}">权限组</a></li>
+            <li class="layui-this">授权</li>
+        </ul>
+
+        <div class="layui-card-body">
+            <script type="text/javascript" src="__STATIC__/jquery-3.3.1.min.js"></script>
+            <div class="admin-main">
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        {:tree_to_auth_access($menuListTree,$rules)}
+                    </div>
+                </div>
+                <button class="layui-btn setAuthSubmit" id="auth-btn">授权</button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('document').ready(function (argument) {
+        // 设置权限方法
+        var gid = {$gid};
+        $('.setAuthSubmit').click(function () {
+            var ids = new Array();//声明一个存放id的数组
+            $("[name='ids']:checked").each(function(){
+                ids.push($(this).val());
+            });
+            $.ajax({
+                cache: true,
+                type: "POST",
+                url : "{:url('Authmanager/setAccess')}",
+                data: {ids:ids,gid:gid},
+                async: false,
+                success: function(data) {
+                if (data) {
+
+                    setTimeout(function () {
+                        location.href = "{:url('admin/authmanager/index')}";
+                    }, 1000);
+                } else {
+
+                }
+
+            }
+        });
+        });
+    });
+</script>

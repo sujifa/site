@@ -1,56 +1,61 @@
 {layout name="common/header_footer" /}
 
-<div style="margin: 15px;">
-    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>用户编辑</legend>
-    </fieldset>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <p>用户编辑</p>
+        </div>
+        <div class="layui-card-body">
 
-    <form class="layui-form" action="{:url('edit')}" method="post">
+            <form class="layui-form" action="{:url('edit')}" method="post">
 
-        <div class="layui-form-item">
-            <label class="layui-form-label">用户名称</label>
-            <div class="layui-input-block">
-                <input type="text" name="username" value="{$userInfo.username}" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">用户昵称</label>
-            <div class="layui-input-block">
-                <input type="text" name="nickname" value="{$userInfo.nickname}" class="layui-input">
-            </div>
-        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="username" value="{$userInfo.username}" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户昵称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="nickname" value="{$userInfo.nickname}" class="layui-input">
+                    </div>
+                </div>
 
-        <div class="layui-form-item">
-            <label class="layui-form-label">是否禁用</label>
-            <div class="layui-input-block">
-                <select name="status" lay-filter="status">
-                    <option value=""></option>
-                    <option value="1" selected="">否</option>
-                    <option value="0">是</option>
-                </select>
-            </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否禁用</label>
+                    <div class="layui-input-block">
+                        <select name="status" lay-filter="status">
+                            <option value=""></option>
+                            <option value="1" selected="">否</option>
+                            <option value="0">是</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">所属权限组</label>
+                    <div class="layui-input-block">
+                        <select name="group_id" lay-filter="status">
+                            <option value=""></option>
+                            {foreach $userGroup as $ug}
+                            <option value="{$ug.id}" {if condition="$ug.id==$userInfo.group_id"}selected="selected"{/if}>{$ug.title}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <input type="hidden" name="id" value="{$userInfo.id}" />
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">所属权限组</label>
-            <div class="layui-input-block">
-                <select name="group_id" lay-filter="status">
-                    <option value=""></option>
-                    {foreach $userGroup as $ug}
-                    <option value="{$ug.id}" {if condition="$ug.id==$userInfo.group_id"}selected="selected"{/if}>{$ug.title}</option>
-                    {/foreach}
-                </select>
-            </div>
-        </div>
-        <input type="hidden" name="id" value="{$userInfo.id}" />
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
-                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-            </div>
-        </div>
-    </form>
+    </div>
 </div>
-<script type="text/javascript" src="STATIC_PATH/plugins/layui/layui.js"></script>
+
 <script>
     layui.use(['form', 'layedit', 'laydate']);
 </script>
