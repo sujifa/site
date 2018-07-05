@@ -1,0 +1,50 @@
+{layout name="common/header_footer" /}
+
+<div class="admin-main">
+
+    <blockquote class="layui-elem-quote">
+        <p>用户列表</p>
+    </blockquote>
+    <fieldset class="layui-elem-field">
+        <legend>数据列表</legend>
+        <div class="layui-field-box">
+            <table class="site-table table-hover">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" id="selected-all"></th>
+                    <th>ID</th>
+                    <th>用户名</th>
+                    <th>昵称</th>
+                    <th>创建时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {volist name="userList" id="list"}
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>{$list.id}</td>
+                    <td>{$list.username}</td>
+                    <td>{$list.nickname}</td>
+                    <td>{$list.add_time}</td>
+                    <td>{$list.status|get_user_status}</td>
+                    <td>
+                        <!--<a href="/detail-1" target="_blank" class="layui-btn layui-btn-normal layui-btn-mini">预览</a>-->
+                        <a href="{:url('Member/edit',['id'=>$list.id])}" class="layui-btn layui-btn-mini">编辑</a>
+                        <a href="{:url('Member/editPass',['id'=>$list.id])}" class="layui-btn layui-btn-mini">改密</a>
+                        <a href="{:url('Member/delete',['id'=>$list.id])}" onclick="return confirm('确定要删除吗？');" data-id="1" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+                    </td>
+                </tr>
+                {/volist}
+                </tbody>
+            </table>
+
+        </div>
+    </fieldset>
+    <div class="admin-table-page">
+        <div id="page" class="page">
+            {$userList->render()}
+        </div>
+    </div>
+</div>
