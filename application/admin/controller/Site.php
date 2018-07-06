@@ -15,7 +15,8 @@ class Site extends Common
     }
 
     //获取ico路径
-    //https://www.google.com/s2/favicons?domain=url   来自Google的
+    // https://www.google.com/s2/favicons?domain=url   来自Google的
+    // https://favicon.yandex.net/favicon/sina.cn  来自yandex的解析
     public function getFavion($url)
     {
         $favion = new Favion();
