@@ -19,7 +19,7 @@ class Favion
      */
     public function getFav($url, $path)
     {
-        $curl = get_url_content($url);
+        $curl = $this->get_url_content($url);
         $file = $curl['exec'];  //获取到的文件
         $zt = $curl['getinfo']; //状态
 
@@ -37,10 +37,9 @@ class Favion
             else if($zt['content_type']=='image/vnd.microsoft.icon') //维基百科是这个类型
             {
                 $this->echoFav($path, $file);  //直接输出
-            }else{
-                return '-1';
             }
         }
+        return -1;
     }
 
     /**
@@ -53,9 +52,15 @@ class Favion
         if($file == '')  //没有
         {
             $file = "null.ico"; //默认的图标
-            if (file_exists($file))  return ROOT_PATH.'public/static/ico/'.$file; //$file = file_get_contents($file);
+            if (file_exists($file)){
+                $file = file_get_contents($file);
+                return './ico/'.$file;
+            }
         }
-        if($path != '') return $path;  //file_put_contents($path, $file);   //保存文件
+        if($path != ''){
+            $newFile = file_put_contents($path, $file); //保存文件
+            return $path;
+        }
         die($file);
     }
 

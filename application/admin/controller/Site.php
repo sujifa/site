@@ -8,22 +8,27 @@ class Site extends Common
 {
     public function index()
     {
+        $data['url'] = 'www.163.com';
+        $ico = $this->getFavion($data['url']);
+        var_dump($ico);
         return view();
     }
 
     //获取ico路径
-    public function getFavion()
+    //https://www.google.com/s2/favicons?domain=url   来自Google的
+    public function getFavion($url)
     {
         $favion = new Favion();
-        $dir = './public/static/ico';//图标缓存目录
+        $dir = './ico';//图标缓存目录
         //如果缓存目录不存在则创建
         if (!is_dir($dir)) mkdir($dir,0777,true) or die('创建缓存目录失败！');
 
-        $url = $favion->getParam('url'); //获取传过来的链接参数
+//        $url = $favion->getParam('url'); //获取传过来的链接参数
         //没有url参数，输出默认图像
         if(!$url){
             return $favion->echoFav();
         }
+        $http = 'http://';
         //如果网页不是http://开头的，就给他加上
         if(substr($url, 0, 4) != 'http')
         {
@@ -41,7 +46,6 @@ class Site extends Common
         $domain = $arr['host']; //没有头和尾的裸域名
 
         $fav = $dir."/".$domain.".ico"; //图标保存的路径和名称
-
         //调用缓存文件
         if (file_exists($fav)) //有缓存就直接输出缓存
         {
@@ -49,17 +53,18 @@ class Site extends Common
         }
         //直接尝试站点根目录下的favion.ico文件  (通用方法)
         $result = $favion->getFav($http.$domain."/favicon.ico", $fav);
+
         if($result != -1){
             return $result;
         }
         //直接请求目标网址并匹配<meta>标签中的favion.ico
-        $curl = get_url_content($url);
+        $curl = $favion->get_url_content($url);
         $file = $curl['exec'];
         preg_match('|href\s*=\s*[\"\']([^<>]*?)\.ico[\"\'\?]|i',$file,$a);    //正则匹配
         //没有匹配结果
         if(!(isset($a[1]) && $a[1]))
         {
-            $info = $favion->getFav('http://cdn.website.h.qhimg.com/index.php?domain='.$domain, $fav);  //来自360的api
+            $info = $favion->getFav('https://ico.mikelin.cn/'.$domain, $fav);
             if($info == -1){
                 return $favion->echoFav($fav);
             }else{
@@ -67,7 +72,10 @@ class Site extends Common
             }
         }
         $a[1] .='.ico'; //加上后缀名
+        //判断链接是否完整
+        $a[1] = $this->typeOfUrl($a[1]);
         $info = $favion->getFav($a[1], $fav);    //如果favicon自身带有完整链接
+
         if($info != -1){
             return $info;
         }
@@ -89,7 +97,7 @@ class Site extends Common
             return $info2;
         }
         //上面的方法都没法获取
-        $info3 = $favion->getFav('http://cdn.website.h.qhimg.com/index.php?domain='.$domain, $fav);  //来自360的api
+        $info3 = $favion->getFav('https://ico.mikelin.cn/'.$domain, $fav);
 
         if($info3 == -1){
             return $favion->echoFav($fav);
@@ -97,6 +105,24 @@ class Site extends Common
             return $info3;
         }
 
+    }
+
+    private function typeOfUrl($url){
+        if(empty($url)){
+            return '';
+        }
+        //判断是否http开头
+        if(!preg_match("/^http/",$url)){
+            //判断图片路径是否以“//”开头
+            if(preg_match("/^\/\//",$url)){
+                $url = substr($url,2);
+            }
+            //判断图片路径是否以“/”开头
+            if(preg_match("/^\//",$url)){
+                $url = substr($url,1);
+            }
+        }
+        return $url;
     }
 
 }
