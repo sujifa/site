@@ -27,19 +27,21 @@ class Favion
         {
             if(md5($file) == '4d8504e8ead22878dc1278750d874663')    //获取到的是来自360api的星星……
             {
-                $this->echoFav($path);
+                return $this->echoFav($path);
             }
 
             if($zt['content_type']=='image/x-icon') //是一个合法的图片文件
             {
-                $this->echoFav($path, $file);  //直接输出
+                return $this->echoFav($path, $file);  //直接输出
             }
             else if($zt['content_type']=='image/vnd.microsoft.icon') //维基百科是这个类型
             {
-                $this->echoFav($path, $file);  //直接输出
+                return $this->echoFav($path, $file);  //直接输出
             }
+        }else{
+            return -1;
         }
-        return -1;
+
     }
 
     /**
@@ -49,6 +51,7 @@ class Favion
      */
     public function echoFav($path = '', $file = '')
     {
+
         if($file == '')  //没有
         {
             $file = "null.ico"; //默认的图标

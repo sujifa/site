@@ -33,7 +33,8 @@ class Common extends Controller{
         Cache::clear();
         $path = dirname(APP_PATH)."/runtime/temp";
         delDirAndFile($path,false);
-        return $this->success('清除缓存成功',url('admin/index/index'));
+        exit('<script>top.location.href="'.config('site').'/site/public/index.php/admin/index/index"</script>');
+//        return $this->success('清除缓存成功',url('admin/index/index'));
     }
 
     //权限检查

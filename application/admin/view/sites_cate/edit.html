@@ -1,0 +1,49 @@
+{layout name="common/header_footer" /}
+
+<div class="layui-fluid">
+    <div class="layui-card layui-tab-brief">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <p>站点分类列表</p>
+        </div>
+        <ul class="layui-tab-title">
+            <li class=""><a href="{:url('index')}">站点分类列表</a></li>
+            <li class="layui-this">编辑分类</li>
+        </ul>
+
+        <div class="layui-card-body">
+            <form class="layui-form" action="{:url('edit')}" method="post">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">分类名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="cate_name" required  lay-verify="required" value="{$info.cate_name}" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="有效" {if condition="$info.status==1" }checked="checked"{/if}>
+                        <input type="radio" name="status" value="0" title="无效" {if condition="$info.status==0" }checked="checked"{/if}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="sort" value="{$info.sort}" required  lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <input type="hidden" name="id" value="{$info.id}">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'layedit', 'laydate']);
+</script>

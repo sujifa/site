@@ -1,0 +1,66 @@
+{layout name="common/header_footer" /}
+
+<div class="layui-fluid">
+    <div class="layui-card layui-tab-brief">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <p>站点列表</p>
+        </div>
+        <ul class="layui-tab-title">
+            <li class=""><a href="{:url('index')}">站点列表</a></li>
+            <li class="layui-this">编辑站点</li>
+        </ul>
+
+        <div class="layui-card-body">
+            <form class="layui-form" action="{:url('edit')}" method="post">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">分类</label>
+                    <div class="layui-input-block">
+                        <select name="cate_id" lay-verify="required">
+                            <option value="0">一级菜单</option>
+                            {foreach name="cate" item="c"}
+                            <option value="{$c.id}" {if condition="$c.id==$info.cate_id"} selected="selected"{/if}>{$c.cate_name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">站点名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="site_name" value="{$info.site_name}" required  lay-verify="required" placeholder="请输入站点名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">站点描述</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="description" value="{$info.description}" lay-verify="required" placeholder="站点描述" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">网址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="site_url" value="{$info.site_url}" lay-verify="required" placeholder="网址" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="有效" {if $info.status eq 1} checked="checked" {/if}>
+                        <input type="radio" name="status" value="0" title="无效" {if $info.status eq 0} checked="checked" {/if}>
+                    </div>
+                </div>
+                <input type="hidden" name="id" value="{$info.id}">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'layedit', 'laydate']);
+</script>

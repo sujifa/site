@@ -1,0 +1,48 @@
+{layout name="common/header_footer" /}
+
+<div class="layui-fluid">
+    <div class="layui-card layui-tab-brief">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <p>站点分类列表</p>
+        </div>
+        <ul class="layui-tab-title">
+            <li class="layui-this">站点分类列表</li>
+            <li class=""><a href="{:url('add')}">添加分类</a></li>
+        </ul>
+
+        <div class="layui-card-body">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>分类名称</th>
+                    <th>可用状态</th>
+                    <th>排序</th>
+                    <th>创建时间</th>
+                    <th>更新时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {if isset($cate)}
+                {foreach name="cate" item="c"}
+                <tr>
+                    <td>{$c.id}</td>
+                    <td>{$c.cate_name}</td>
+                    <td>{if $c.status eq 1}有效{else/}失效{/if}</td>
+                    <td>{$c.sort}</td>
+                    <td>{$c.create_time}</td>
+                    <td>{$c.update_time}</td>
+                    <td>
+                        <a href="{:url('edit',['id'=>$c['id']])}" class="layui-btn layui-btn-normal layui-btn-mini">编辑</a>
+                        <a href="{:url('delete',['id'=>$c['id']])}" onclick="return confirm('确定要删除吗？')" class="layui-btn layui-btn-danger layui-btn-mini ajax-delete">删除</a>
+                    </td>
+                </tr>
+                {/foreach}
+                {/if}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
