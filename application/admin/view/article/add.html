@@ -1,0 +1,111 @@
+{layout name="common/header_footer" /}
+
+<script src="__ROOT__/editor/lib/jquery/dist/jquery.js"></script>
+<script src="__ROOT__/editor/lib/markdown-it/dist/markdown-it.js"></script>
+<script src="__ROOT__/editor/lib/to-mark/dist/to-mark.js"></script>
+<script src="__ROOT__/editor/lib/tui-code-snippet/dist/tui-code-snippet.js"></script>
+<script src="__ROOT__/editor/lib/tui-color-picker/dist/tui-color-picker.js"></script>
+<script src="__ROOT__/editor/lib/codemirror/lib/codemirror.js"></script>
+<script src="__ROOT__/editor/lib/highlightjs/highlight.pack.js"></script>
+<script src="__ROOT__/editor/lib/squire-rte/build/squire-raw.js"></script>
+<link rel="stylesheet" href="__ROOT__/editor/lib/codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="__ROOT__/editor/lib/highlightjs/styles/github.css">
+<link rel="stylesheet" href="__ROOT__/editor/explain.css">
+<script src="__ROOT__/editor/lib/plantuml-encoder/dist/plantuml-encoder.js"></script>
+<script src="__ROOT__/editor/lib/raphael/raphael.js"></script>
+<script src="__ROOT__/editor/lib/tui-chart/dist/tui-chart.js"></script>
+<script src="__ROOT__/editor/dist/tui-editor-Editor-all.js"></script>
+<link rel="stylesheet" href="__ROOT__/editor/dist/tui-editor.css">
+<link rel="stylesheet" href="__ROOT__/editor/dist/tui-editor-contents.css">
+<link rel="stylesheet" href="__ROOT__/editor/lib/tui-color-picker/dist/tui-color-picker.css">
+<link rel="stylesheet" href="__ROOT__/editor/lib/tui-chart/dist/tui-chart.css">
+<div class="layui-fluid">
+    <div class="layui-card layui-tab-brief">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <p>站点分类列表</p>
+        </div>
+        <ul class="layui-tab-title">
+            <li class=""><a href="{:url('index')}">站点分类列表</a></li>
+            <li class="layui-this">添加分类</li>
+        </ul>
+
+        <div class="layui-card-body">
+
+            <form class="layui-form form-container" action="{:url('add')}" method="post">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">分类名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="cate_name" value="" required  lay-verify="required" placeholder="请输入分类名称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="有效" checked="checked">
+                        <input type="radio" name="status" value="0" title="无效">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="sort" value="0" required  lay-verify="required" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序</label>
+                    <div class="layui-input-block" id="editSection" name="content">
+
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="*">保存</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <button class="layui-btn" lay-submit lay-filter="*" id="haha">保存</button>
+
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'layedit', 'laydate']);
+</script>
+
+<script class="code-js">
+    // https://nhnent.github.io/tui.editor/api/latest/ToastUIEditor.html#ToastUIEditor
+    var editor = new tui.Editor({
+        el: document.querySelector('#editSection'),
+        previewStyle: 'vertical',
+        height: '400px',
+        initialEditType: 'markdown',
+        useCommandShortcut: true,
+        initialValue: '',
+        language: 'zh_CN',
+        hooks: addImageBlobHook,
+        exts: [
+            {
+                name: 'chart',
+                minWidth: 100,
+                maxWidth: 600,
+                minHeight: 100,
+                maxHeight: 300
+            },
+            'scrollSync',
+            'colorSyntax',
+            'uml',
+            'mark',
+            'table'
+        ]
+    });
+    function addImageBlobHook(fileOrBlob,callback,source){
+        alert(callback);
+    }
+    $('#haha').click(function(){
+        var html = editor.getHtml();
+        var markdown = editor.getMarkdown();
+        alert(html);alert(markdown);
+    });
+</script>
