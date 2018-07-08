@@ -1,5 +1,25 @@
 {layout name="common/header_footer" /}
 
+<script src="__ROOT__/editor/lib/jquery/dist/jquery.js"></script>
+<script src="__ROOT__/editor/lib/markdown-it/dist/markdown-it.js"></script>
+<script src="__ROOT__/editor/lib/tui-code-snippet/dist/tui-code-snippet.js"></script>
+<script src="__ROOT__/editor/lib/highlightjs/highlight.pack.js"></script>
+<link rel="stylesheet" href="__ROOT__/editor/lib/highlightjs/styles/github.css">
+<script src="__ROOT__/editor/dist/tui-editor-Viewer.js"></script>
+<link rel="stylesheet" href="__ROOT__/editor/explain.css">
+<link rel="stylesheet" href="__ROOT__/editor/dist/tui-editor-contents.css">
+<!--<script src="__ROOT__/editor/lib/to-mark/dist/to-mark.js"></script>-->
+<!--<script src="__ROOT__/editor/lib/tui-color-picker/dist/tui-color-picker.js"></script>-->
+<!--<script src="__ROOT__/editor/lib/codemirror/lib/codemirror.js"></script>-->
+<!--<script src="__ROOT__/editor/lib/squire-rte/build/squire-raw.js"></script>-->
+<!--<link rel="stylesheet" href="__ROOT__/editor/lib/codemirror/lib/codemirror.css">-->
+<!--<script src="__ROOT__/editor/lib/plantuml-encoder/dist/plantuml-encoder.js"></script>-->
+<!--<script src="__ROOT__/editor/lib/raphael/raphael.js"></script>-->
+<!--<script src="__ROOT__/editor/lib/tui-chart/dist/tui-chart.js"></script>-->
+<!--<script src="__ROOT__/editor/dist/tui-editor-Editor-all.js"></script>-->
+<!--<link rel="stylesheet" href="__ROOT__/editor/dist/tui-editor.css">-->
+<!--<link rel="stylesheet" href="__ROOT__/editor/lib/tui-color-picker/dist/tui-color-picker.css">-->
+<!--<link rel="stylesheet" href="__ROOT__/editor/lib/tui-chart/dist/tui-chart.css">-->
 <div class="layui-fluid">
     <div class="layui-card layui-tab-brief">
         <div class="layui-card-header layuiadmin-card-header-auto">
@@ -15,24 +35,30 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>分类名称</th>
-                    <th>可用状态</th>
-                    <th>排序</th>
+                    <th>标题</th>
+                    <th>作者</th>
+                    <th>类型</th>
+                    <th>阅读状态</th>
+                    <th>是否有效</th>
                     <th>创建时间</th>
                     <th>更新时间</th>
+                    <th>删除时间</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                {if isset($cate)}
-                {foreach name="cate" item="c"}
+                {if isset($article)}
+                {foreach name="$article" item="c"}
                 <tr>
                     <td>{$c.id}</td>
-                    <td>{$c.cate_name}</td>
-                    <td>{if $c.status eq 1}有效{else/}失效{/if}</td>
-                    <td>{$c.sort}</td>
+                    <td>{$c.title}</td>
+                    <td>{$c.author}</td>
+                    <td>{if $c.type eq 1}文本{elseif $c.type eq 2}多图片{elseif $c.type eq 3}视频{elseif $c.type eq 4}音频{elseif $c.type eq 5}引用{/if}</td>
+                    <td>{if $c.read_type eq 1}正常{else/}密码{/if}</td>
+                    <td>{if $c.status eq 1}正常{else/}失效{/if}</td>
                     <td>{$c.create_time}</td>
                     <td>{$c.update_time}</td>
+                    <td>{$c.delete_time}</td>
                     <td>
                         <a href="{:url('edit',['id'=>$c['id']])}" class="layui-btn layui-btn-normal layui-btn-mini">编辑</a>
                         <a href="{:url('delete',['id'=>$c['id']])}" onclick="return confirm('确定要删除吗？')" class="layui-btn layui-btn-danger layui-btn-mini ajax-delete">删除</a>
@@ -42,7 +68,25 @@
                 {/if}
                 </tbody>
             </table>
+            <div id="viewerSection"></div>
+            <div id="viewerSection2" style="display: none;">{$a.content}</div>
+        </div>
+        <div class="admin-table-page">
+            <div id="page" class="page">
+                {$article->render()}
+            </div>
         </div>
 
     </div>
 </div>
+
+<script class="code-js">
+    var content = $("#viewerSection2").html();
+    var editor = new tui.Editor({
+        el: document.querySelector('#viewerSection'),
+        viewer: true,
+        height: '500px',
+        initialValue: content
+    });
+
+</script>

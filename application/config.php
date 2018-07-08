@@ -244,5 +244,5 @@ return [
         'length'    =>  3,
         'useNoise'  =>false,
     ],
-    'site' => 'http://'.$_SERVER['HTTP_HOST'],
+    'site' => dirname('http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']),
 ];

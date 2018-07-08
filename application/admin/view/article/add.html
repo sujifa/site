@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="__ROOT__/editor/dist/tui-editor-contents.css">
 <link rel="stylesheet" href="__ROOT__/editor/lib/tui-color-picker/dist/tui-color-picker.css">
 <link rel="stylesheet" href="__ROOT__/editor/lib/tui-chart/dist/tui-chart.css">
+
 <div class="layui-fluid">
     <div class="layui-card layui-tab-brief">
         <div class="layui-card-header layuiadmin-card-header-auto">
@@ -83,8 +84,10 @@
         initialEditType: 'markdown',
         useCommandShortcut: true,
         initialValue: '',
+        hooks: {
+            addImageBlobHook: addImageBlobHook.bind(this),
+        },
         language: 'zh_CN',
-        hooks: addImageBlobHook,
         exts: [
             {
                 name: 'chart',
@@ -100,12 +103,76 @@
             'table'
         ]
     });
-    function addImageBlobHook(fileOrBlob,callback,source){
-        alert(callback);
-    }
+
     $('#haha').click(function(){
         var html = editor.getHtml();
         var markdown = editor.getMarkdown();
         alert(html);alert(markdown);
     });
+
+
+    function addImageBlobHook(blob, callback) {
+        const data = new FormData();
+        //blob就是一个文件对象
+        data.append('image', blob);
+        //console.log(data, $('#cuzn123')[0]);
+        //console.log 打印data的时候确实为空,要用下面的方法打印,然后看php获取的值,之前一直用get,拿不到值,换了post就好了
+        //console.log(data.has("upfile"));//true
+        console.log(data.get("image"));
+
+        //data.forEach(function(file){
+        //    console.log(file);
+        //});
+
+        $.ajax({
+            url: "{:url('upload')}",
+            type: "POST",
+            data: data,
+            //dataType: 'JSON',
+            processData: false,
+            contentType: false,
+            //async: false,
+            cache: false,
+            //headers: {
+            //    'Content-Type': 'multipart/form-data'
+            //},
+            success: function (result) {
+                result = JSON.parse(result);
+                console.log(typeof result);
+                console.log("result['state'] : " + result["state"]);
+                console.log("result.state : " + result.state);
+                if (result["code"] == '1') {
+                    //这里是生成htpp模式的图片地址(我这里是七牛返回的一个key,需要转换)
+                    // var image = MyCommon.getViewImage(result["key"]);
+                    var image = result['msg']['url'];
+                    //这里是插件自带的回调函数
+                    callback(image, 'alt text');
+                }
+                console.log(result);
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+        //$.get('/upload-images', data, config) .then(response => { callback(response.data.url, ''); }) .catch(error => { })
+    }
+
+
+
+    //提交表单之前 把值插入textarea 里面
+
+    function subF() {
+
+        $("#content").val(editor.getMarkdown ());
+
+        //console.log('editor.getHtml () : ' + editor.getHtml ());
+
+        //console.log('editor.getValue () : ' + editor.getValue ());
+
+        //console.log('editor.getMarkdown () : ' + editor.getMarkdown ());
+
+        return true;
+
+    }
+
 </script>

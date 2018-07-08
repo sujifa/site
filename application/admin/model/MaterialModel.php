@@ -11,24 +11,21 @@ namespace app\admin\model;
 use think\Exception;
 use think\Model;
 
-class SiteModel extends Model
+class MaterialModel extends Model
 {
-    protected $name = 'site';
+    protected $name = 'material';
 
-    //获取分类列表
+    //获取所有素材
     public function getAll()
     {
         try{
-            $data = $this->where('status',1)->paginate(20);
+            $data = $this
+                ->order('id desc')
+                ->paginate(20);
             return $data;
         }catch (Exception $e){
             return false;
         }
-    }
-
-    public function siteAndCate()
-    {
-        return $this->belongsTo('SitesCateModel','cate_id','id');
     }
 
 }

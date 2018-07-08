@@ -10,8 +10,6 @@ class Site extends Common
 {
     public function index()
     {
-        $url = 'https://www.baidu.com/';
-        $this->getFavion($url);
         $model = new SiteModel();
         $cate = $model->getAll();
         if($cate){
