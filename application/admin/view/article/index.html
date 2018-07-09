@@ -81,12 +81,46 @@
 </div>
 
 <script class="code-js">
+        (function(root, factory) {
+            if (typeof define === 'function' && define.amd) {
+                define(['tui-editor'], factory);
+            } else if (typeof exports === 'object') {
+                factory(require('tui-editor'));
+            } else {
+                factory(root['tui']['Editor']);
+            }
+        })(this, function(Editor) {
+            // define youtube extension
+            Editor.defineExtension('video', function() {
+                // runs while markdown-it transforms code block to HTML
+                Editor.codeBlockManager.setReplacer('video', function(youtubeId) {
+                    // Indentify multiple code blocks
+                    var wrapperId = 'yt' + Math.random().toString(36).substr(2, 10);
+                    // avoid sanitizing iframe tag
+                    setTimeout(renderVideo.bind(null, wrapperId, youtubeId), 0);
+
+                    return '<div id="' + wrapperId + '"></div>';
+                });
+            });
+    //https://o05g5zevc.qnssl.com/40bdda92-e29f-4606-81de-9d04254a4a1e/Despacito.mp4#t=11,280
+            function renderVideo(wrapperId, youtubeId) {
+                var el = document.querySelector('#' + wrapperId);
+                el.innerHTML = "<video  playsinline webkit-playsinline preload='auto' controls src='"+youtubeId+"' width='100%'  webkit-playsinline playsinline>如果你看到这段文字，说明视频挂掉。</video>";
+            }
+        });
+
     var content = $("#viewerSection2").html();
     var editor = new tui.Editor({
         el: document.querySelector('#viewerSection'),
         viewer: true,
         height: '500px',
-        initialValue: content
+        initialValue: content,
+        exts: [
+            'video'
+        ]
     });
+    //将audio 和video 标签补充完整
+    // $('#viewerSection audio').attr({controls:'controls',preload:'auto'});
+    // $('#viewerSection video').attr({controls:'controls',preload:'auto'});
 
 </script>

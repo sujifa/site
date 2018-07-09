@@ -15,6 +15,7 @@
 <script src="__ROOT__/editor/lib/raphael/raphael.js"></script>
 <script src="__ROOT__/editor/lib/tui-chart/dist/tui-chart.js"></script>
 <script src="__ROOT__/editor/dist/tui-editor-Editor-all.js"></script>
+<script src="__ROOT__/editor/dist/tui-editor-Editor.js"></script>
 <link rel="stylesheet" href="__ROOT__/editor/dist/tui-editor.css">
 <link rel="stylesheet" href="__ROOT__/editor/dist/tui-editor-contents.css">
 <link rel="stylesheet" href="__ROOT__/editor/lib/tui-color-picker/dist/tui-color-picker.css">
@@ -74,8 +75,37 @@
 <script>
     layui.use(['form', 'layedit', 'laydate']);
 </script>
-
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 <script class="code-js">
+    (function(root, factory) {
+        if (typeof define === 'function' && define.amd) {
+            define(['tui-editor'], factory);
+        } else if (typeof exports === 'object') {
+            factory(require('tui-editor'));
+        } else {
+            factory(root['tui']['Editor']);
+        }
+    })(this, function(Editor) {
+        // define youtube extension
+        Editor.defineExtension('youtube', function() {
+            // runs while markdown-it transforms code block to HTML
+            Editor.codeBlockManager.setReplacer('youtube', function(youtubeId) {
+                // Indentify multiple code blocks
+                var wrapperId = 'yt' + Math.random().toString(36).substr(2, 10);
+                // avoid sanitizing iframe tag
+                setTimeout(renderYoutube.bind(null, wrapperId, youtubeId), 0);
+
+                return '<div id="' + wrapperId + '"></div>';
+            });
+        });
+//https://o05g5zevc.qnssl.com/40bdda92-e29f-4606-81de-9d04254a4a1e/Despacito.mp4#t=11,280
+        function renderYoutube(wrapperId, youtubeId) {
+            var el = document.querySelector('#' + wrapperId);
+            el.innerHTML = "<video  playsinline webkit-playsinline preload='auto' controls src='"+youtubeId+"' width='100%'  webkit-playsinline playsinline>如果你看到这段文字，说明视频挂掉。</video>";
+        }
+    });
+
+
     // https://nhnent.github.io/tui.editor/api/latest/ToastUIEditor.html#ToastUIEditor
     var editor = new tui.Editor({
         el: document.querySelector('#editSection'),
@@ -88,6 +118,29 @@
             addImageBlobHook: addImageBlobHook.bind(this),
         },
         language: 'zh_CN',
+        toolbarItems: [
+            'heading',
+            'bold',
+            'italic',
+            'strike',
+            'divider',
+            'hr',
+            'quote',
+            'divider',
+            'ul',
+            'ol',
+            'task',
+            'indent',
+            'outdent',
+            'divider',
+            'table',
+            'image',
+            'link',
+            'divider',
+            'code',
+            'codeblock',
+            'divider'
+            ],
         exts: [
             {
                 name: 'chart',
@@ -99,10 +152,34 @@
             'scrollSync',
             'colorSyntax',
             'uml',
+            'chart',
             'mark',
-            'table'
+            'table',
+            'video'
         ]
     });
+
+
+
+    // ADD button method 2
+    const toolbar = editor.getUI().getToolbar();
+
+    editor.eventManager.addEventType('Event1');
+    var html = "``` youtube" +"\n\n"+
+        "```";
+
+    // editor.setMarkdown(html,true);
+    // editor.setValue(html,true);
+    editor.setValue(html);
+    });
+
+    toolbar.addButton({
+        name: 'customize',
+        className: 'fab fa-accessible-icon',
+        event: 'Event1',
+        tooltip: 'Video',
+        $el: $('<div class="our-button-class" style="display: inline-block;float: left;"><i class="fab fa-apple"></i></div>')
+    }, 1);
 
     $('#haha').click(function(){
         var html = editor.getHtml();
