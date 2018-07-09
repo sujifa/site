@@ -90,22 +90,22 @@
                 factory(root['tui']['Editor']);
             }
         })(this, function(Editor) {
-            // define youtube extension
+            // define video extension
             Editor.defineExtension('video', function() {
                 // runs while markdown-it transforms code block to HTML
-                Editor.codeBlockManager.setReplacer('video', function(youtubeId) {
+                Editor.codeBlockManager.setReplacer('video', function(src) {
                     // Indentify multiple code blocks
                     var wrapperId = 'yt' + Math.random().toString(36).substr(2, 10);
                     // avoid sanitizing iframe tag
-                    setTimeout(renderVideo.bind(null, wrapperId, youtubeId), 0);
+                    setTimeout(renderVideo.bind(null, wrapperId, src), 0);
 
                     return '<div id="' + wrapperId + '"></div>';
                 });
             });
     //https://o05g5zevc.qnssl.com/40bdda92-e29f-4606-81de-9d04254a4a1e/Despacito.mp4#t=11,280
-            function renderVideo(wrapperId, youtubeId) {
+            function renderVideo(wrapperId, src) {
                 var el = document.querySelector('#' + wrapperId);
-                el.innerHTML = "<video  playsinline webkit-playsinline preload='auto' controls src='"+youtubeId+"' width='100%'  webkit-playsinline playsinline>如果你看到这段文字，说明视频挂掉。</video>";
+                el.innerHTML = "<video  playsinline webkit-playsinline preload='auto' controls src='"+src+"' width='100%'  webkit-playsinline playsinline>如果你看到这段文字，说明视频挂掉。</video>";
             }
         });
 
