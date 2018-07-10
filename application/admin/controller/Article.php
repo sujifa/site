@@ -3,6 +3,7 @@ namespace app\admin\controller;
 
 use \app\admin\model\ArticleModel;
 use app\admin\model\MaterialModel;
+use app\admin\model\TagModel;
 
 class Article extends Common
 {
@@ -31,6 +32,10 @@ class Article extends Common
                 return $this->error('添加失败');
             }
         }
+        //获取标签
+        $tagModel = new TagModel();
+        $tagInfo = $tagModel->getAll();
+        $this->assign('tagInfo',$tagInfo);
 
         return view();
         

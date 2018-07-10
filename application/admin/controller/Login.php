@@ -27,14 +27,14 @@ class Login extends Controller{
             $userInfo = Db::name('Users')->where($where)->find();
             $returnData = [];
             $returnData['code'] = 1;
-            $returnData['info'] = '登录成功';
+            $returnData['msg'] = '登录成功';
             if($userInfo && $userInfo['password'] === $password ){
                 session('uid',$userInfo['id']);
                 session('username',$userInfo['username']);
                 die(json_encode($returnData));
             }else{
                 $returnData['code'] = 0;
-                $returnData['info'] = '登录失败';
+                $returnData['msg'] = '登录失败';
                 die(json_encode($returnData));
             }
 

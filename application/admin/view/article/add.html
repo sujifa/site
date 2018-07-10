@@ -24,38 +24,91 @@
 <div class="layui-fluid">
     <div class="layui-card layui-tab-brief">
         <div class="layui-card-header layuiadmin-card-header-auto">
-            <p>站点分类列表</p>
+            <p>文章列表</p>
         </div>
         <ul class="layui-tab-title">
-            <li class=""><a href="{:url('index')}">站点分类列表</a></li>
-            <li class="layui-this">添加分类</li>
+            <li class=""><a href="{:url('index')}">文章列表</a></li>
+            <li class="layui-this">添加文章</li>
         </ul>
 
         <div class="layui-card-body">
 
-            <form class="layui-form form-container" action="{:url('add')}" method="post">
+            <form class="layui-form form-container" action="{:url('add')}" method="post" onsubmit="return checkSubmit()">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">分类名称</label>
+                    <label class="layui-form-label">文章标题</label>
                     <div class="layui-input-block">
-                        <input type="text" name="cate_name" value="" required  lay-verify="required" placeholder="请输入分类名称" class="layui-input">
+                        <input type="text" name="title" value="" required  lay-verify="required" placeholder="请输入文章标题" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">状态</label>
+                    <label class="layui-form-label">作者</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="author" value="" required  lay-verify="required" placeholder="作者" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">前引</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="header" value="" required  lay-verify="required" placeholder="前引" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标签</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="tag" value=""  placeholder="标签" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标签</label>
+                    <div class="layui-input-block">
+                        <select name="tag" lay-verify="required">
+                            <option value=""></option>
+                            <option value="0">选择标签</option>
+                            {foreach name="tagInfo" item="tag"}
+                            <option value="{$tag.id}">{$tag.tag_name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">描述</label>
+                    <div class="layui-input-block">
+                        <textarea name="description" placeholder="请输入描述" lay-verify="required" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">文章类型</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="type" value="1" title="文本" checked="checked">
+                        <input type="radio" name="type" value="2" title="多图片">
+                        <input type="radio" name="type" value="3" title="视频">
+                        <input type="radio" name="type" value="4" title="音频">
+                        <input type="radio" name="type" value="5" title="引用">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">阅读状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="read_type" value="1" title="正常" checked="checked">
+                        <input type="radio" name="read_type" value="0" title="密码">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="password" value="" placeholder="密码" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否有效</label>
                     <div class="layui-input-block">
                         <input type="radio" name="status" value="1" title="有效" checked="checked">
                         <input type="radio" name="status" value="0" title="无效">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">排序</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="sort" value="0" required  lay-verify="required" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">排序</label>
-                    <div class="layui-input-block" id="editSection" name="content">
+                    <label class="layui-form-label">正文</label>
+                    <div class="layui-input-block" id="editSection">
 
                     </div>
                 </div>
@@ -79,9 +132,6 @@
 
 <script src="__ROOT__/editor/video-and-audio.js"></script>
 <script class="code-js">
-
-
-
 
     // https://nhnent.github.io/tui.editor/api/latest/ToastUIEditor.html#ToastUIEditor
     var editor = new tui.Editor({
@@ -138,15 +188,6 @@
     });
 
     newButton(editor);
-
-    $('#haha').click(function(){
-        var html = editor.getHtml();
-        var markdown = editor.getMarkdown();
-        alert(html);alert(markdown);//alert(con);
-
-
-    });
-
 
     function addImageBlobHook(blob, callback) {
         const data = new FormData();

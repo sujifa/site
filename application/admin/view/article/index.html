@@ -8,26 +8,14 @@
 <script src="__ROOT__/editor/dist/tui-editor-Viewer.js"></script>
 <link rel="stylesheet" href="__ROOT__/editor/explain.css">
 <link rel="stylesheet" href="__ROOT__/editor/dist/tui-editor-contents.css">
-<!--<script src="__ROOT__/editor/lib/to-mark/dist/to-mark.js"></script>-->
-<!--<script src="__ROOT__/editor/lib/tui-color-picker/dist/tui-color-picker.js"></script>-->
-<!--<script src="__ROOT__/editor/lib/codemirror/lib/codemirror.js"></script>-->
-<!--<script src="__ROOT__/editor/lib/squire-rte/build/squire-raw.js"></script>-->
-<!--<link rel="stylesheet" href="__ROOT__/editor/lib/codemirror/lib/codemirror.css">-->
-<!--<script src="__ROOT__/editor/lib/plantuml-encoder/dist/plantuml-encoder.js"></script>-->
-<!--<script src="__ROOT__/editor/lib/raphael/raphael.js"></script>-->
-<!--<script src="__ROOT__/editor/lib/tui-chart/dist/tui-chart.js"></script>-->
-<!--<script src="__ROOT__/editor/dist/tui-editor-Editor-all.js"></script>-->
-<!--<link rel="stylesheet" href="__ROOT__/editor/dist/tui-editor.css">-->
-<!--<link rel="stylesheet" href="__ROOT__/editor/lib/tui-color-picker/dist/tui-color-picker.css">-->
-<!--<link rel="stylesheet" href="__ROOT__/editor/lib/tui-chart/dist/tui-chart.css">-->
 <div class="layui-fluid">
     <div class="layui-card layui-tab-brief">
         <div class="layui-card-header layuiadmin-card-header-auto">
-            <p>站点分类列表</p>
+            <p>文章列表</p>
         </div>
         <ul class="layui-tab-title">
-            <li class="layui-this">站点分类列表</li>
-            <li class=""><a href="{:url('add')}">添加分类</a></li>
+            <li class="layui-this">文章列表</li>
+            <li class=""><a href="{:url('add')}">添加文章</a></li>
         </ul>
 
         <div class="layui-card-body">
@@ -116,9 +104,24 @@
         height: '500px',
         initialValue: content,
         exts: [
-            'video'
+            {
+                name: 'chart',
+                minWidth: 100,
+                maxWidth: 600,
+                minHeight: 100,
+                maxHeight: 300
+            },
+            'scrollSync',
+            'colorSyntax',
+            'uml',
+            'chart',
+            'mark',
+            'table',
+            'video',
+            'audio'
         ]
     });
+
     //将audio 和video 标签补充完整
     // $('#viewerSection audio').attr({controls:'controls',preload:'auto'});
     // $('#viewerSection video').attr({controls:'controls',preload:'auto'});
