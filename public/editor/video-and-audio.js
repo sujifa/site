@@ -41,7 +41,11 @@ function newButton(editor){
 
     editor.eventManager.addEventType('Event1');
     editor.eventManager.listen('Event1', () => {
-        var html = "``` video \n\n```";
+        var html = '';
+        if(editor.isMarkdownMode()){
+            html = "``` video \n\n```";
+        }
+
     editor.insertText(html);
 });
     toolbar.addButton({
@@ -55,7 +59,11 @@ function newButton(editor){
 
     editor.eventManager.addEventType('Event2');
     editor.eventManager.listen('Event2', () => {
-        var html = "``` audio \n\n```";
+        var html = '';
+        if(editor.isMarkdownMode()){
+            html = "``` audio \n\n```";
+        }
+
     editor.insertText(html);
 });
     toolbar.addButton({

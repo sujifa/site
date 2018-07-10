@@ -14,7 +14,7 @@
 <script src="__ROOT__/editor/lib/plantuml-encoder/dist/plantuml-encoder.js"></script>
 <script src="__ROOT__/editor/lib/raphael/raphael.js"></script>
 <script src="__ROOT__/editor/lib/tui-chart/dist/tui-chart.js"></script>
-<script src="__ROOT__/editor/dist/tui-editor-Editor.js"></script>
+<!--<script src="__ROOT__/editor/dist/tui-editor-Editor.js"></script>-->
 <script src="__ROOT__/editor/dist/tui-editor-Editor-all.js"></script>
 <link rel="stylesheet" href="__ROOT__/editor/dist/tui-editor.css">
 <link rel="stylesheet" href="__ROOT__/editor/dist/tui-editor-contents.css">
@@ -139,13 +139,12 @@
 
     newButton(editor);
 
-
-
     $('#haha').click(function(){
         var html = editor.getHtml();
         var markdown = editor.getMarkdown();
-        var con = editor.toMarkdown(html);
-        alert(html);alert(markdown);alert(con);
+        alert(html);alert(markdown);//alert(con);
+
+
     });
 
 
