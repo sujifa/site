@@ -67,35 +67,8 @@
 
     </div>
 </div>
-
+<script src="__ROOT__/editor/video-and-audio.js"></script>
 <script class="code-js">
-        (function(root, factory) {
-            if (typeof define === 'function' && define.amd) {
-                define(['tui-editor'], factory);
-            } else if (typeof exports === 'object') {
-                factory(require('tui-editor'));
-            } else {
-                factory(root['tui']['Editor']);
-            }
-        })(this, function(Editor) {
-            // define video extension
-            Editor.defineExtension('video', function() {
-                // runs while markdown-it transforms code block to HTML
-                Editor.codeBlockManager.setReplacer('video', function(src) {
-                    // Indentify multiple code blocks
-                    var wrapperId = 'yt' + Math.random().toString(36).substr(2, 10);
-                    // avoid sanitizing iframe tag
-                    setTimeout(renderVideo.bind(null, wrapperId, src), 0);
-
-                    return '<div id="' + wrapperId + '"></div>';
-                });
-            });
-    //https://o05g5zevc.qnssl.com/40bdda92-e29f-4606-81de-9d04254a4a1e/Despacito.mp4#t=11,280
-            function renderVideo(wrapperId, src) {
-                var el = document.querySelector('#' + wrapperId);
-                el.innerHTML = "<video  playsinline webkit-playsinline preload='auto' controls src='"+src+"' width='100%'  webkit-playsinline playsinline>如果你看到这段文字，说明视频挂掉。</video>";
-            }
-        });
 
     var content = $("#viewerSection2").html();
     var editor = new tui.Editor({

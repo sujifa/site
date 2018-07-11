@@ -1,10 +1,16 @@
 {layout name="common/header_footer" /}
-
+<style>
+    .selected{border: 2px solid #FFB800;}
+    li{display: inline-block;padding:6px 6px 0 0;}
+    li img{width: 70px;height:70px;border: 2px solid #ffffff;}
+</style>
 <div class="layui-fluid" id="LAY-flow-demo">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
             <div class="layui-card">
-                <div class="layui-card-header">信息流 - 滚动加载</div>
+                <div class="layui-card-header">
+                    <button class="layui-card-header layui-btn layui-btn-primary" data-type="setParent">选择素材</button>
+                </div>
                 <div class="layui-card-body">
                     <ul class="flow-default" id="flow-auto"></ul>
                 </div>
@@ -15,26 +21,14 @@
 </div>
 <script src="__STATIC__/layui/layui.all.js"></script>
 <script>
-    layui.use(['flow'], function(){
+    layui.use(['flow','layer'], function(){
         var flow = layui.flow;
         var $ = layui.jquery;
         flow.load({
             elem: '#flow-auto' //流加载容器
             // ,scrollElem: '#flow-auto' //滚动条所在元素，一般不用填，此处只是演示需要。
             ,done: function(page, next){ //执行下一页的回调
-                //console.log(page); //获得当前页
                 var lis = [];
-                //以jQuery的Ajax请求为例，请求下一页数据（注意：page是从2开始返回）
-                // $.get("{:url('material/all')}?page="+page, function(res){
-                //     //假设你的列表返回在data集合中
-                //     layui.each(res.data, function(index, item){
-                //         lis.push('<li><img src="'+item.url+'"></li>');
-                //     });
-                //     //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
-                //     //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
-                //     next(lis.join(''), page < res.pages);
-                // });
-
                 $.ajax({
                     type:"get",
                     url:"{:url('material/all')}",
@@ -42,10 +36,8 @@
                     data:{'page':page},
                     success:function(res){
                         layui.each(res.data, function(index, item){
-                            lis.push('<li><img src="'+item.url+'"></li>');
+                            lis.push('<li><img onclick="selectThis(this);" src="'+item.url+'" alt="'+item.title+'" /></li>');
                         });
-                        //执行下一页渲染，第二参数为：满足“加载更多”的条件，即后面仍有分页
-                        //pages为Ajax返回的总页数，只有当前页小于总页数的情况下，才会继续出现加载更多
                         next(lis.join(''), page < res.pages);
 
                     }
@@ -54,5 +46,48 @@
         });
 
 
+            var layer = layui.layer
+                ,index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+
+            var active = {
+                //给父页面传值
+                setParent: function(){
+                    var text = '';
+                    $('ul').find("img").each(function(i,e){
+                        if($(e).hasClass('selected')){
+                            text += $(e).attr('src')+',';
+                        }
+
+                    });
+                    // text = text.substr(0,text.length-1);
+                    parent.layui.$("input[name='header']").val(text.slice(0,-1));
+                    parent.layer.close(index);
+                }
+
+
+                //在内部关闭iframe
+                ,close: function(set){
+                    parent.layer.close(index);
+                }
+            }
+
+            $('.layui-card .layui-btn').on('click', function(){
+                var othis = $(this)
+                    ,type = othis.data('type');
+                active[type] && active[type].call(this);
+            });
+
+
     });
+
+    var $ = layui.jquery;
+    function selectThis(obj){
+        var has = $(obj).hasClass('selected');
+        if(has){
+            $(obj).removeClass('selected');
+        }else{
+            $(obj).addClass('selected');
+        }
+    }
+
 </script>

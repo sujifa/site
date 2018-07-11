@@ -47,6 +47,12 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <label class="layui-form-label">正文</label>
+                    <div class="layui-input-block" id="editSection">
+
+                    </div>
+                </div>
+                <div class="layui-form-item">
                     <label class="layui-form-label">前引</label>
                     <div class="layui-input-block">
                         <input type="text" name="header" value="" required  lay-verify="required" placeholder="前引" class="layui-input"><button class="layui-btn layui-btn-primary" onclick="selectMaterial(this);">选择前引素材</button>
@@ -55,8 +61,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">标签</label>
                     <div class="layui-input-block">
-                        <select name="tag" lay-verify="required">
-                            <option value=""></option>
+                        <select name="tag">
                             <option value="0">选择标签</option>
                             {foreach name="tagInfo" item="tag"}
                             <option value="{$tag.id}">{$tag.tag_name}</option>
@@ -100,12 +105,7 @@
                         <input type="radio" name="status" value="0" title="无效">
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">正文</label>
-                    <div class="layui-input-block" id="editSection">
-
-                    </div>
-                </div>
+                <textarea name="content" id="content" hidden></textarea>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit lay-filter="*">保存</button>
@@ -121,7 +121,7 @@
 
 <script>
     layui.use(['form', 'layedit', 'laydate','layer'],function () {
-        var $ = layui.$;
+        // var $ = layui.$;
         var layer = layui.layer;
     });
     function selectMaterial(){
@@ -131,12 +131,6 @@
             ,content: ["{:url('material/all')}",'yes']
             ,maxmin: true
             ,area: ['90%', '90%']
-            ,btn: ['确定', '取消']
-            ,yes: function(index, layero){
-                //点击确认触发 iframe 内容中的按钮提交
-                var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
-                submit.click();
-            }
         });
     }
     
@@ -252,9 +246,9 @@
 
     //提交表单之前 把值插入textarea 里面
 
-    function subF() {
+    function checkSubmit() {
 
-        $("#content").val(editor.getMarkdown ());
+        $("#content").val(editor.getMarkdown());
 
         //console.log('editor.getHtml () : ' + editor.getHtml ());
 

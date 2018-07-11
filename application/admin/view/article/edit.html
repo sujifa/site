@@ -1,37 +1,111 @@
 {layout name="common/header_footer" /}
 
+<script src="__ROOT__/editor/lib/jquery/dist/jquery.js"></script>
+<script src="__ROOT__/editor/lib/markdown-it/dist/markdown-it.js"></script>
+<script src="__ROOT__/editor/lib/to-mark/dist/to-mark.js"></script>
+<script src="__ROOT__/editor/lib/tui-code-snippet/dist/tui-code-snippet.js"></script>
+<script src="__ROOT__/editor/lib/tui-color-picker/dist/tui-color-picker.js"></script>
+<script src="__ROOT__/editor/lib/codemirror/lib/codemirror.js"></script>
+<script src="__ROOT__/editor/lib/highlightjs/highlight.pack.js"></script>
+<script src="__ROOT__/editor/lib/squire-rte/build/squire-raw.js"></script>
+<link rel="stylesheet" href="__ROOT__/editor/lib/codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="__ROOT__/editor/lib/highlightjs/styles/github.css">
+<link rel="stylesheet" href="__ROOT__/editor/explain.css">
+<script src="__ROOT__/editor/lib/plantuml-encoder/dist/plantuml-encoder.js"></script>
+<script src="__ROOT__/editor/lib/raphael/raphael.js"></script>
+<script src="__ROOT__/editor/lib/tui-chart/dist/tui-chart.js"></script>
+<!--<script src="__ROOT__/editor/dist/tui-editor-Editor.js"></script>-->
+<script src="__ROOT__/editor/dist/tui-editor-Editor-all.js"></script>
+<link rel="stylesheet" href="__ROOT__/editor/dist/tui-editor.css">
+<link rel="stylesheet" href="__ROOT__/editor/dist/tui-editor-contents.css">
+<link rel="stylesheet" href="__ROOT__/editor/lib/tui-color-picker/dist/tui-color-picker.css">
+<link rel="stylesheet" href="__ROOT__/editor/lib/tui-chart/dist/tui-chart.css">
+
 <div class="layui-fluid">
     <div class="layui-card layui-tab-brief">
         <div class="layui-card-header layuiadmin-card-header-auto">
-            <p>站点分类列表</p>
+            <p>文章列表</p>
         </div>
         <ul class="layui-tab-title">
-            <li class=""><a href="{:url('index')}">站点分类列表</a></li>
-            <li class="layui-this">编辑分类</li>
+            <li class=""><a href="{:url('index')}">文章列表</a></li>
+            <li class="layui-this">编辑文章</li>
         </ul>
 
         <div class="layui-card-body">
-            <form class="layui-form" action="{:url('edit')}" method="post">
+
+            <form class="layui-form form-container" action="{:url('add')}" method="post" onsubmit="return checkSubmit()">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">分类名称</label>
+                    <label class="layui-form-label">文章标题</label>
                     <div class="layui-input-block">
-                        <input type="text" name="cate_name" required  lay-verify="required" value="{$info.cate_name}" class="layui-input">
+                        <input type="text" name="title" value="{$info.title}" required  lay-verify="required" placeholder="请输入文章标题" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">状态</label>
+                    <label class="layui-form-label">作者</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="status" value="1" title="有效" {if condition="$info.status==1" }checked="checked"{/if}>
-                        <input type="radio" name="status" value="0" title="无效" {if condition="$info.status==0" }checked="checked"{/if}>
+                        <input type="text" name="author" value="{$info.author}" required  lay-verify="required" placeholder="作者" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">排序</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="sort" value="{$info.sort}" required  lay-verify="required" class="layui-input">
+                    <label class="layui-form-label">正文</label>
+                    <div class="layui-input-block" id="editSection">
+
                     </div>
                 </div>
-                <input type="hidden" name="id" value="{$info.id}">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">前引</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="header" value="{$info.header}" required  lay-verify="required" placeholder="前引" class="layui-input"><button class="layui-btn layui-btn-primary" onclick="selectMaterial(this);">选择前引素材</button>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标签</label>
+                    <div class="layui-input-block">
+                        <select name="tag">
+                            <option value="0">选择标签</option>
+                            {foreach name="tagInfo" item="tag"}
+                            <option value="{$tag.id}" {if condition="$info.id eq $tag.id"}selected{/if}>{$tag.tag_name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">描述</label>
+                    <div class="layui-input-block">
+                        <textarea name="description" placeholder="请输入描述" lay-verify="required" class="layui-textarea">{$info.description}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">文章类型</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="type" value="1" title="文本" {if condition="$info.type eq 1"} checked="checked"{/if}>
+                        <input type="radio" name="type" value="2" title="多图片" {if condition="$info.type eq 2"} checked="checked"{/if}>
+                        <input type="radio" name="type" value="3" title="视频" {if condition="$info.type eq 3"} checked="checked"{/if}>
+                        <input type="radio" name="type" value="4" title="音频" {if condition="$info.type eq 4"} checked="checked"{/if}>
+                        <input type="radio" name="type" value="5" title="引用" {if condition="$info.type eq 5"} checked="checked"{/if}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">阅读状态</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="read_type" value="1" title="正常"  {if condition="$info.read_type eq 1"} checked="checked"{/if}>
+                        <input type="radio" name="read_type" value="0" title="密码" {if condition="$info.read_type eq 0"} checked="checked"{/if}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="password" value="{$info.password}" placeholder="密码" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否有效</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="status" value="1" title="有效" {if condition="$info.status eq 1"} checked="checked"{/if}>
+                        <input type="radio" name="status" value="0" title="无效" {if condition="$info.status eq 0"} checked="checked"{/if}>
+                    </div>
+                </div>
+                <textarea name="content" id="content" hidden></textarea>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit lay-filter="*">保存</button>
@@ -40,10 +114,150 @@
                 </div>
             </form>
         </div>
+        <button class="layui-btn" lay-submit lay-filter="*" id="haha">保存</button>
 
     </div>
 </div>
 
 <script>
-    layui.use(['form', 'layedit', 'laydate']);
+    layui.use(['form', 'layedit', 'laydate','layer'],function () {
+        // var $ = layui.$;
+        var layer = layui.layer;
+    });
+    function selectMaterial(){
+        layer.open({
+            type: 2
+            ,title: '素材'
+            ,content: ["{:url('material/all')}",'yes']
+            ,maxmin: true
+            ,area: ['90%', '90%']
+        });
+    }
+
+</script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+
+<script src="__ROOT__/editor/video-and-audio.js"></script>
+<script class="code-js">
+    var content = "{$info.content}";
+    // https://nhnent.github.io/tui.editor/api/latest/ToastUIEditor.html#ToastUIEditor
+    var editor = new tui.Editor({
+        el: document.querySelector('#editSection'),
+        previewStyle: 'vertical',
+        height: '400px',
+        initialEditType: 'markdown',
+        useCommandShortcut: true,
+        initialValue: content,
+        hooks: {
+            addImageBlobHook: addImageBlobHook.bind(this),
+        },
+        language: 'zh_CN',
+        toolbarItems: [
+            'heading',
+            'bold',
+            'italic',
+            'strike',
+            'divider',
+            'hr',
+            'quote',
+            'divider',
+            'ul',
+            'ol',
+            'task',
+            'indent',
+            'outdent',
+            'divider',
+            'table',
+            'image',
+            'link',
+            'divider',
+            'code',
+            'codeblock',
+            'divider'
+        ],
+        exts: [
+            {
+                name: 'chart',
+                minWidth: 100,
+                maxWidth: 600,
+                minHeight: 100,
+                maxHeight: 300
+            },
+            'scrollSync',
+            'colorSyntax',
+            'uml',
+            'chart',
+            'mark',
+            'table',
+            'video',
+            'audio'
+        ]
+    });
+
+    newButton(editor);
+
+    function addImageBlobHook(blob, callback) {
+        const data = new FormData();
+        //blob就是一个文件对象
+        data.append('image', blob);
+        //console.log(data, $('#cuzn123')[0]);
+        //console.log 打印data的时候确实为空,要用下面的方法打印,然后看php获取的值,之前一直用get,拿不到值,换了post就好了
+        //console.log(data.has("upfile"));//true
+        console.log(data.get("image"));
+
+        //data.forEach(function(file){
+        //    console.log(file);
+        //});
+
+        $.ajax({
+            url: "{:url('upload')}",
+            type: "POST",
+            data: data,
+            //dataType: 'JSON',
+            processData: false,
+            contentType: false,
+            //async: false,
+            cache: false,
+            //headers: {
+            //    'Content-Type': 'multipart/form-data'
+            //},
+            success: function (result) {
+                result = JSON.parse(result);
+                console.log(typeof result);
+                console.log("result['state'] : " + result["state"]);
+                console.log("result.state : " + result.state);
+                if (result["code"] == '1') {
+                    //这里是生成htpp模式的图片地址(我这里是七牛返回的一个key,需要转换)
+                    // var image = MyCommon.getViewImage(result["key"]);
+                    var image = result['msg']['url'];
+                    //这里是插件自带的回调函数
+                    callback(image, 'alt text');
+                }
+                console.log(result);
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+        //$.get('/upload-images', data, config) .then(response => { callback(response.data.url, ''); }) .catch(error => { })
+    }
+
+
+
+    //提交表单之前 把值插入textarea 里面
+
+    function checkSubmit() {
+
+        $("#content").val(editor.getMarkdown());
+
+        //console.log('editor.getHtml () : ' + editor.getHtml ());
+
+        //console.log('editor.getValue () : ' + editor.getValue ());
+
+        //console.log('editor.getMarkdown () : ' + editor.getMarkdown ());
+
+        return true;
+
+    }
+
 </script>

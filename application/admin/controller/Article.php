@@ -11,7 +11,7 @@ class Article extends Common
     {
         $model = new ArticleModel();
         $article = $model->getAll();
-        $a = $model->where('id',1)->find();
+        $a = $model->where('id',2)->find();
         if($article){
             $this->assign('article',$article);
             $this->assign('a',$a);
@@ -23,8 +23,8 @@ class Article extends Common
     public function add()
     {
         $data = input('post.');
-        if($data){var_dump($data);die;
-            $model = new SitesCateModel();
+        if($data){
+            $model = new ArticleModel();
             $info = $model->save($data);
             if($info){
                 return $this->success('添加成功',url('index'));
@@ -45,7 +45,7 @@ class Article extends Common
     {
         $data = input('post.');
         $id = input('id');
-        $model = new SitesCateModel();
+        $model = new ArticleModel();
         if($data){
             $result = $model->isUpdate(true)->save($data);
             if($result){
@@ -56,7 +56,12 @@ class Article extends Common
         }
         if($id){
             $info = $model->find($id);
+            var_dump(explode('\n',$info['content']));die;
             if($info){
+                //获取标签
+                $tagModel = new TagModel();
+                $tagInfo = $tagModel->getAll();
+                $this->assign('tagInfo',$tagInfo);
                 $this->assign('info',$info);
             }else{
                 return $this->error('没有该分类信息');
@@ -68,7 +73,7 @@ class Article extends Common
     public function delete()
     {
         $id = input('id');
-        $model = new SitesCateModel();
+        $model = new ArticleModel();
         $result = $model->where('id',$id)->delete();
         if($result){
             return $this->success('删除成功',url('index'));
