@@ -55,7 +55,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">前引</label>
                     <div class="layui-input-block">
-                        <input type="text" name="header" value="{$info.header}" required  lay-verify="required" placeholder="前引" class="layui-input"><button class="layui-btn layui-btn-primary" onclick="selectMaterial(this);">选择前引素材</button>
+                        <input type="text" name="header" value="{$info.header}" required  lay-verify="required" placeholder="前引" class="layui-input"><span class="layui-btn layui-btn-primary" id="selectMaterial" data-type="selectMaterial">选择前引素材</span>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -121,19 +121,33 @@
 </div>
 
 <script>
-    layui.use(['form', 'layedit', 'laydate','layer'],function () {
-        // var $ = layui.$;
-        var layer = layui.layer;
-    });
-    function selectMaterial(){
-        layer.open({
-            type: 2
-            ,title: '素材'
-            ,content: ["{:url('material/all')}",'yes']
-            ,maxmin: true
-            ,area: ['90%', '90%']
+    layui.config({
+        base: '__STATIC__/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['form', 'index', 'laydate','layer'],function () {
+        var $ = layui.$
+            ,admin = layui.admin
+            ,element = layui.element
+            ,layer = layui.layer;
+
+        var active = {
+            selectMaterial:function(){
+                layer.open({
+                    type: 2
+                    ,title: '素材'
+                    ,content: ["{:url('material/all')}",'yes']
+                    ,maxmin: true
+                    ,area: ['90%', '90%']
+                });
+            },
+        };
+        $('.material .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] && active[type].call(this);
         });
-    }
+    });
+
 
 </script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">

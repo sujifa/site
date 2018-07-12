@@ -1,0 +1,48 @@
+{layout name="common/header_footer" /}
+<style>
+    .material-img{width: 100px;}
+</style>
+<div class="layui-fluid">
+    <div class="layui-card layui-tab-brief">
+        <div class="layui-card-header layuiadmin-card-header-auto">
+            <p>素材列表</p>
+        </div>
+
+        <div class="layui-card-body">
+            <table class="layui-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>名称</th>
+                    <th>图片</th>
+                    <th>地址</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {if isset($info)}
+                {foreach name="$info" item="c"}
+                <tr>
+                    <td>{$c.id}</td>
+                    <td>{$c.title}</td>
+                    <td><img class="material-img" src="{$c.url}" alt="{$c.title}"></td>
+                    <td>{$c.url}</td>
+                    <td>{$c.create_time}</td>
+                    <td>
+                        <a href="{:url('delete',['id'=>$c['id']])}" onclick="return confirm('确定要删除吗？')" class="layui-btn layui-btn-danger layui-btn-mini ajax-delete">删除</a>
+                    </td>
+                </tr>
+                {/foreach}
+                {/if}
+                </tbody>
+            </table>
+        </div>
+        <div class="admin-table-page">
+            <div id="page" class="page">
+                {$info->render()}
+            </div>
+        </div>
+
+    </div>
+</div>

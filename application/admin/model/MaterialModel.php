@@ -15,6 +15,14 @@ class MaterialModel extends Model
 {
     protected $name = 'material';
 
+    public function selectMaterial(){
+        try{
+            $data = $this->paginate(20);
+            return $data;
+        }catch (Exception $e){
+            return false;
+        }
+    }
     //获取所有素材
     public function getAll($page)
     {

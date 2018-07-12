@@ -95,9 +95,10 @@ class Article extends Common
                 // 成功上传后 获取上传信息
                 // 输出 20160820/42a79759f284b767dfcb2a0197904287.jpg
                 $url = config('site').'/uploads/'.date('Ymd').'/'.($info->getFilename()); //($info->getSaveName());
+                $localUrl = '/public/uploads/'.date('Ymd').'/'.($info->getFilename());
                 $name = $info->getFilename();
                 //将文件保存到素材数据库表
-                $id = $this->saveMaterial($url,$name);
+                $id = $this->saveMaterial($url,$localUrl,$name);
                 $data['code'] = 1;
                 $data['msg']['url'] = $url;
                 $data['msg']['id'] = $id;
@@ -112,10 +113,11 @@ class Article extends Common
     }
 
     //保存素材数据到素材表、
-    private function saveMaterial($url,$title)
+    private function saveMaterial($url,$localUrl,$title)
     {
         $data = [];
         $data['url'] = $url;
+        $data['local_url'] = $localUrl;
         $data['title'] = $title;
         $model = new MaterialModel();
         $info = $model->saveMaterial($data);

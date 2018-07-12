@@ -7,9 +7,9 @@ class Material extends Common
     public function index()
     {
         $model = new MaterialModel();
-        $cate = $model->getAll();
-        if($cate){
-            $this->assign('cate',$cate);
+        $info = $model->selectMaterial();
+        if($info){
+            $this->assign('info',$info);
         }
 
         return view();
@@ -42,7 +42,9 @@ class Material extends Common
     public function delete()
     {
         $id = input('id');
-        $model = new SitesCateModel();
+        $model = new MaterialModel();
+        $info = $model->find($id);
+        $a = delFile(dirname(APP_PATH).$info['local_url']);
         $result = $model->where('id',$id)->delete();
         if($result){
             return $this->success('删除成功',url('index'));

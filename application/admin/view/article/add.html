@@ -54,8 +54,8 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">前引</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="header" value="" required  lay-verify="required" placeholder="前引" class="layui-input"><button class="layui-btn layui-btn-primary" onclick="selectMaterial(this);">选择前引素材</button>
+                    <div class="layui-input-block material">
+                        <input type="text" name="header" value="" required  lay-verify="required" placeholder="前引" class="layui-input"><span class="layui-btn layui-btn-primary" id="selectMaterial" data-type="selectMaterial">选择前引素材</span>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -106,7 +106,7 @@
                     </div>
                 </div>
                 <textarea name="content" id="content" hidden></textarea>
-                <input type="hidden" name="material_id" id="material_id" value="">
+                <textarea name="html_content" id="html_content" hidden></textarea>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit lay-filter="*">保存</button>
@@ -119,21 +119,36 @@
 
     </div>
 </div>
+<!--<script src="__STATIC__/layui/layui.all.js"></script>-->
 
 <script>
-    layui.use(['form', 'layedit', 'laydate','layer'],function () {
-        // var $ = layui.$;
-        var layer = layui.layer;
-    });
-    function selectMaterial(){
-        layer.open({
-            type: 2
-            ,title: '素材'
-            ,content: ["{:url('material/all')}",'yes']
-            ,maxmin: true
-            ,area: ['90%', '90%']
+    layui.config({
+        base: '__STATIC__/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['form', 'index', 'laydate','layer'],function () {
+        var $ = layui.$
+            ,admin = layui.admin
+            ,element = layui.element
+            ,layer = layui.layer;
+
+        var active = {
+            selectMaterial:function(){
+                layer.open({
+                    type: 2
+                    ,title: '素材'
+                    ,content: ["{:url('material/all')}",'yes']
+                    ,maxmin: true
+                    ,area: ['90%', '90%']
+                });
+            },
+        };
+        $('.material .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] && active[type].call(this);
         });
-    }
+    });
+
     
 </script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
@@ -231,13 +246,6 @@
                     //这里是生成htpp模式的图片地址(我这里是七牛返回的一个key,需要转换)
                     // var image = MyCommon.getViewImage(result["key"]);
                     var image = result['msg']['url'];
-                    var id = result['msg']['id'];
-                    var material_id = $('#material_id').val();
-                    if(material_id == ''){
-                        $("#material_id").val(id);
-                    }else{
-                        $("#material_id").val(material_id+","+id);
-                    }
                     //这里是插件自带的回调函数
                     callback(image, 'alt text');
                 }
@@ -257,6 +265,7 @@
     function checkSubmit() {
 
         $("#content").val(editor.getMarkdown());
+        $("#html_content").val(editor.getHtml());
 
         //console.log('editor.getHtml () : ' + editor.getHtml ());
 

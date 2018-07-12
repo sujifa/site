@@ -50,6 +50,13 @@ function delDirAndFile($path, $delDir = FALSE) {
         }
     }
 }
+function delFile($path) {
+    if (file_exists($path)) {
+        return unlink($path);
+    } else {
+        return FALSE;
+    }
+}
 
 /**
  * 数组数据层级缩进
