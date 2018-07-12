@@ -56,7 +56,6 @@ class Article extends Common
         }
         if($id){
             $info = $model->find($id);
-            var_dump(explode('\n',$info['content']));die;
             if($info){
                 //获取标签
                 $tagModel = new TagModel();
@@ -98,9 +97,10 @@ class Article extends Common
                 $url = config('site').'/uploads/'.date('Ymd').'/'.($info->getFilename()); //($info->getSaveName());
                 $name = $info->getFilename();
                 //将文件保存到素材数据库表
-                $this->saveMaterial($url,$name);
+                $id = $this->saveMaterial($url,$name);
                 $data['code'] = 1;
                 $data['msg']['url'] = $url;
+                $data['msg']['id'] = $id;
                 $data['msg']['name'] = $name;
                 die(json_encode($data));
                 // 输出 42a79759f284b767dfcb2a0197904287.jpg
@@ -118,7 +118,8 @@ class Article extends Common
         $data['url'] = $url;
         $data['title'] = $title;
         $model = new MaterialModel();
-        $info = $model->save($data);
+        $info = $model->saveMaterial($data);
+        return $info;
     }
 
 

@@ -30,5 +30,16 @@ class MaterialModel extends Model
             return false;
         }
     }
+    //新增
+    public function saveMaterial($condition)
+    {
+        try{
+            $data = $this->save($condition);
+            $id = $this->getLastInsID();
+            return $id;
+        }catch (Exception $e){
+            return false;
+        }
+    }
 
 }

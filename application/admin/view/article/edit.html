@@ -33,7 +33,7 @@
 
         <div class="layui-card-body">
 
-            <form class="layui-form form-container" action="{:url('add')}" method="post" onsubmit="return checkSubmit()">
+            <form class="layui-form form-container" action="{:url('edit')}" method="post" onsubmit="return checkSubmit()">
                 <div class="layui-form-item">
                     <label class="layui-form-label">文章标题</label>
                     <div class="layui-input-block">
@@ -105,7 +105,8 @@
                         <input type="radio" name="status" value="0" title="无效" {if condition="$info.status eq 0"} checked="checked"{/if}>
                     </div>
                 </div>
-                <textarea name="content" id="content" hidden></textarea>
+                <textarea name="content" id="content" hidden>{$info.content}</textarea>
+                <input type="hidden" name="id" value="{$info.id}">
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn" lay-submit lay-filter="*">保存</button>
@@ -139,7 +140,7 @@
 
 <script src="__ROOT__/editor/video-and-audio.js"></script>
 <script class="code-js">
-    var content = "{$info.content}";
+    var content = $("#content").html();
     // https://nhnent.github.io/tui.editor/api/latest/ToastUIEditor.html#ToastUIEditor
     var editor = new tui.Editor({
         el: document.querySelector('#editSection'),
