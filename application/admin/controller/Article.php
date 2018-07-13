@@ -25,8 +25,13 @@ class Article extends Common
         $data = input('post.');
         if($data){
             $model = new ArticleModel();
-            $info = $model->save($data);
-            if($info){
+            $tag = array_values($data['tag']);
+            unset($data['tag']);
+            $model->save($data);
+            $id = $model->getLastInsID();
+            $info = ArticleModel::get($id);
+            $result = $info->artTag()->attach($tag);
+            if($result){
                 return $this->success('添加成功',url('index'));
             }else{
                 return $this->error('添加失败');
@@ -47,7 +52,12 @@ class Article extends Common
         $id = input('id');
         $model = new ArticleModel();
         if($data){
+            $tag = array_values($data['tag']);
+            unset($data['tag']);
             $result = $model->isUpdate(true)->save($data);
+            $info = ArticleModel::get($data['id']);
+            $info->artTag()->detach();
+            $result = $info->artTag()->attach($tag);
             if($result){
                 return $this->success('编辑成功',url('index'));
             }else{

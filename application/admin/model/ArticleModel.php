@@ -29,4 +29,8 @@ class ArticleModel extends Model
         }
     }
 
+    public function artTag(){
+        return $this->belongsToMany('tagModel','article_tag','tag_id','article_id');
+    }
+
 }

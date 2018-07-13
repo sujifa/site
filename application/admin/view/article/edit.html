@@ -61,12 +61,9 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">标签</label>
                     <div class="layui-input-block">
-                        <select name="tag">
-                            <option value="0">选择标签</option>
-                            {foreach name="tagInfo" item="tag"}
-                            <option value="{$tag.id}" {if condition="$info.id eq $tag.id"}selected{/if}>{$tag.tag_name}</option>
-                            {/foreach}
-                        </select>
+                        {foreach name="tagInfo" item="tag"}
+                        <input type="checkbox" name="tag[]" value="{$tag.id}" title="{$tag.tag_name}" {if condition="$tag.id eq "}checked{/if}>
+                        {/foreach}
                     </div>
                 </div>
                 <div class="layui-form-item">
